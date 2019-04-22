@@ -12,18 +12,20 @@ export class AppComponent implements OnInit {
   selectedShinobi: Shinobi = new Shinobi();
 
   constructor(private shinobisService: ShinobisService) { }
-
-
+  
   ngOnInit() {
+    
     this.shinobisService.getShinobis()
       .subscribe(
         res => {
+          console.log(res);
           this.shinobiArray = res;
         },
         err => console.log(err)
       );
+    
   }
-
+  
   openForEdit(shinobi: Shinobi) {
     this.selectedShinobi = shinobi;
   }
@@ -31,8 +33,9 @@ export class AppComponent implements OnInit {
   addOrEdit() {
     //create
     if(this.selectedShinobi.Id === 0) {
-      this.selectedShinobi.Id = this.shinobiArray.length + 1;
+      this.selectedShinobi.Id = this.shinobiArray[this.shinobiArray.length - 1].Id + 1;
       this.shinobiArray.push(this.selectedShinobi);
+      console.log(this.selectedShinobi);
       //add to database
       this.shinobisService.saveShinobi(this.selectedShinobi)
        .subscribe(
